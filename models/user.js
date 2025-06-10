@@ -35,6 +35,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  role: {
+    type: Number,
+    enum: [1, 2, 3], // 1: admin, 2: associate, 3: customer
+    required: true,
+    default: 3, // default role as customer
+  },
   isDeleted: {
     type: Boolean,
     default: false,
@@ -46,9 +52,18 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String, // could be a URL or file path
   },
+
+  associatedWith: [{
+    relatedId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',   // optional, if you want references inside objects
+        required: true
+      },   
+  }]
 }, {
   timestamps: true, // automatically adds createdAt and updatedAt fields
 });
+
 
 const User = mongoose.model('User', userSchema);
 
